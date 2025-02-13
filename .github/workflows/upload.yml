@@ -20,6 +20,9 @@ jobs:
           aws-region: us-east-1  # Change to your AWS region
 
       - name: Upload changed feature flag file to S3
+        env:
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
+          S3_UPLOAD_DIR: ${{ secrets.S3_UPLOAD_DIR }}
         run: |
           # If the repository has only one commit, use `git ls-files` instead of `git diff`
           if git rev-parse --verify HEAD^ >/dev/null 2>&1; then
