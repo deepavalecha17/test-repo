@@ -1,0 +1,9 @@
+{
+    "default_variant": "on",
+    "variants": {
+      "on": true,
+      "off": false
+    },
+    "description": "test"
+  }
+  
