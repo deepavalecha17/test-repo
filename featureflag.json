@@ -1,0 +1,12 @@
+{
+  "key": "featuretoggle2",
+  "namespace": "featureconfig",
+  "state": "ENABLED",
+  "default_variant": "on",
+  "variants": {
+    "on": true,
+    "off": false
+  },
+  "description": "test",
+  "active": true
+}

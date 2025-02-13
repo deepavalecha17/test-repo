@@ -1,4 +1,4 @@
-name: Upload JSON to S3
+name: Upload JSON to S3 and Sync to AppConfig
 
 on:
   push:
@@ -24,18 +24,30 @@ jobs:
           S3_BUCKET: ${{ secrets.S3_BUCKET }}
           S3_UPLOAD_DIR: ${{ secrets.S3_UPLOAD_DIR }}
         run: |
-          # If the repository has only one commit, use ls-files instead of git diff
-          if git rev-parse --verify HEAD^ >/dev/null 2>&1; then
-            FILES=$(git diff --name-only HEAD^ HEAD | grep 'data.json' || true)
-          else
-            FILES=$(git ls-files | grep 'data.json' || true)
-          fi
-
-          # Upload files if there are any changes
+          FILES=$(git diff --name-only HEAD^ HEAD | grep 'featureflag.json' || true)
+          
           if [[ -n "$FILES" ]]; then
             for file in $FILES; do
-              aws s3api put-object --bucket "$S3_BUCKET" --key "$S3_UPLOAD_DIR/$(basename $file)" --body "$file"
+              aws s3 cp "$file" "s3://$S3_BUCKET/$S3_UPLOAD_DIR/$(basename $file)"
             done
           else
-            echo "No files to upload."
+            echo "No feature flag changes detected."
           fi
+
+      - name: Sync Feature Flag to AWS AppConfig
+        env:
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
+          S3_UPLOAD_DIR: ${{ secrets.S3_UPLOAD_DIR }}
+          APP_ID: "<APP_ID>"
+          CONFIG_PROFILE_ID: "<CONFIG_PROFILE_ID>"
+          ENV_ID: "<ENV_ID>"
+        run: |
+          # Download the feature flag file from S3
+          aws s3 cp "s3://$S3_BUCKET/$S3_UPLOAD_DIR/featureflag.json" featureflag.json
+
+          # Upload the JSON to AWS AppConfig
+          aws appconfig create-hosted-configuration-version \
+            --application-id "$APP_ID" \
+            --configuration-profile-id "$CONFIG_PROFILE_ID" \
+            --content file://featureflag.json \
+            --content-type "application/json"
