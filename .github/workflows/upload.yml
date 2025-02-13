@@ -20,22 +20,22 @@ jobs:
           aws-region: us-east-1  # Change to your AWS region
 
       - name: Upload changed feature flag file to S3
-  run: |
-    # If the repository has only one commit, use `git ls-files` instead of `git diff`
-    if git rev-parse --verify HEAD^ >/dev/null 2>&1; then
-      FILES=$(git diff --name-only HEAD^ HEAD | grep 'featureflag.json' || true)
-    else
-      FILES=$(git ls-files | grep 'featureflag.json' || true)
-    fi
+        run: |
+          # If the repository has only one commit, use `git ls-files` instead of `git diff`
+          if git rev-parse --verify HEAD^ >/dev/null 2>&1; then
+            FILES=$(git diff --name-only HEAD^ HEAD | grep 'featureflag.json' || true)
+          else
+            FILES=$(git ls-files | grep 'featureflag.json' || true)
+          fi
 
-    # Upload only if there are changes
-    if [[ -n "$FILES" ]]; then
-      for file in $FILES; do
-        aws s3 cp "$file" "s3://$S3_BUCKET/$S3_UPLOAD_DIR/$(basename $file)"
-      done
-    else
-      echo "No feature flag changes detected."
-    fi
+          # Upload only if there are changes
+          if [[ -n "$FILES" ]]; then
+            for file in $FILES; do
+              aws s3 cp "$file" "s3://$S3_BUCKET/$S3_UPLOAD_DIR/$(basename $file)"
+            done
+          else
+            echo "No feature flag changes detected."
+          fi
 
       - name: Sync Feature Flag to AWS AppConfig
         env:
