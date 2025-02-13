@@ -57,3 +57,4 @@ jobs:
             --configuration-profile-id "$CONFIG_PROFILE_ID" \
             --content file://featureflag.json \
             --content-type "application/json"
+            --output json
