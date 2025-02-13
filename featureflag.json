@@ -1,5 +1,5 @@
 {
-  "key": "featuretoggle2",
+  "key": "featuretoggle",
   "namespace": "featureconfig",
   "state": "ENABLED",
   "default_variant": "on",
