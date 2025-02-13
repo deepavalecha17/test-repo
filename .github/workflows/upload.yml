@@ -44,9 +44,9 @@ jobs:
         env:
           S3_BUCKET: ${{ secrets.S3_BUCKET }}
           S3_UPLOAD_DIR: ${{ secrets.S3_UPLOAD_DIR }}
-          APP_ID: "<APP_ID>"
-          CONFIG_PROFILE_ID: "<CONFIG_PROFILE_ID>"
-          ENV_ID: "<ENV_ID>"
+          APP_ID: ${{ secrets.APP_ID }}
+          CONFIG_PROFILE_ID: ${{ secrets.CONFIG_PROFILE_ID }}
+          ENV_ID: ${{ secrets.ENV_ID }}
         run: |
           # Download the feature flag file from S3
           aws s3 cp "s3://$S3_BUCKET/$S3_UPLOAD_DIR/featureflag.json" featureflag.json
