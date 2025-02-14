@@ -77,6 +77,4 @@ jobs:
             --application-id "$APP_ID" \
             --configuration-profile-id "$CONFIG_PROFILE_ID" \
             --content file://featureflag.json \
-            --content-type "application/json" \
-            --latest-version-number "$LATEST_VERSION"
-            --output json featureflag.json
+            --content-type "application/json" featureflag.json
