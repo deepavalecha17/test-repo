@@ -79,4 +79,4 @@ jobs:
             --content file://featureflag.json \
             --content-type "application/json" \
             --latest-version-number "$LATEST_VERSION"
-            --output json
+            --output json featureflag.json
