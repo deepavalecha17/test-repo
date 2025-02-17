@@ -21,6 +21,9 @@ jobs:
         env:
           APP_ID: ${{ secrets.APP_ID }}
           CONFIG_PROFILE_ID: ${{ secrets.CONFIG_PROFILE_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          ENV_ID: ${{ secrets.ENV_ID }}
         run: |
           docker-compose up -d
           sleep 10  # Give Flagd time to start
