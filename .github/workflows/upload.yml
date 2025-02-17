@@ -18,6 +18,9 @@ jobs:
           sudo apt-get install -y docker-compose
 
       - name: Start Flagd with Docker Compose
+        env:
+          APP_ID: ${{ secrets.APP_ID }}
+          CONFIG_PROFILE_ID: ${{ secrets.CONFIG_PROFILE_ID }}
         run: |
           docker-compose up -d
           sleep 10  # Give Flagd time to start
