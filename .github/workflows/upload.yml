@@ -28,6 +28,9 @@ jobs:
           docker-compose up -d
           sleep 15  # Give Flagd time to start
 
+      - name: Get Flagd Logs
+        run: docker logs flagd
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
