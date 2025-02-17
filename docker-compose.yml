@@ -8,11 +8,7 @@ services:
       - "8013:8013"  # Expose the HTTP API
     command:
       - start
-      - --uri=https://appconfigdata.us-east-1.amazonaws.com  # Change to your AWS region
-      - --source-type=appconfig
-      - --appconfig-application-id=$APP_ID
-      - --appconfig-environment-id=$ENV_ID
-      - --appconfig-configuration-profile-id=$CONFIG_PROFILE_ID
+        - --sources=[{"uri":"https://appconfigdata.us-east-1.amazonaws.com","provider":"appconfig","applicationID":"${APP_ID}","environmentID":"${ENV_ID}","configurationProfileID":"${CONFIG_PROFILE_ID}"}]
     environment:
       - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
