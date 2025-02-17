@@ -6,9 +6,8 @@ services:
     container_name: flagd
     ports:
       - "8013:8013"  # Expose the HTTP API
-    command:
-      - start
-        - --sources=[{"uri":"https://appconfigdata.us-east-1.amazonaws.com","provider":"appconfig","applicationID":"${APP_ID}","environmentID":"${ENV_ID}","configurationProfileID":"${CONFIG_PROFILE_ID}"}]
+    command: >
+      start --sources='[{"uri":"https://appconfigdata.us-east-1.amazonaws.com","provider":"appconfig","applicationID":"${APP_ID}","environmentID":"${ENV_ID}","configurationProfileID":"${CONFIG_PROFILE_ID}"}]'
     environment:
       - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
