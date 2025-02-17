@@ -56,41 +56,6 @@ jobs:
             echo "No feature flag changes detected."
           fi
 
-      - name: Sync Feature Flag to AWS AppConfig
-        env:
-          S3_BUCKET: ${{ secrets.S3_BUCKET }}
-          S3_UPLOAD_DIR: ${{ secrets.S3_UPLOAD_DIR }}
-          APP_ID: ${{ secrets.APP_ID }}
-          CONFIG_PROFILE_ID: ${{ secrets.CONFIG_PROFILE_ID }}
+      - name: Force Flagd Refresh
         run: |
-          # Download the feature flag file from S3
-          echo "Downloading feature flag JSON from S3..."
-          aws s3 cp "s3://$S3_BUCKET/$S3_UPLOAD_DIR/featureflag.json" featureflag.json
-
-          # Validate that the file was downloaded
-          if [[ ! -f featureflag.json ]]; then
-            echo "❌ ERROR: featureflag.json not found!"
-            exit 1
-          fi
-
-          # Fetch the latest version number from AWS AppConfig
-          echo "Fetching latest configuration version..."
-          LATEST_VERSION=$(aws appconfig list-hosted-configuration-versions \
-            --application-id "$APP_ID" \
-            --configuration-profile-id "$CONFIG_PROFILE_ID" \
-            --query 'Items[-1].VersionNumber' \
-            --output text)
-
-          if [[ "$LATEST_VERSION" == "None" ]]; then
-            LATEST_VERSION=0
-          fi
-
-          echo "Latest configuration version: $LATEST_VERSION"
-
-          # Upload the JSON to AWS AppConfig
-          echo "Uploading featureflag.json to AWS AppConfig..."
-          aws appconfig create-hosted-configuration-version \
-            --application-id "$APP_ID" \
-            --configuration-profile-id "$CONFIG_PROFILE_ID" \
-            --content file://featureflag.json \
-            --content-type "application/json" featureflag.json
+          curl -X POST http://localhost:8013/flagd/reload
